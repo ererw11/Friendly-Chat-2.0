@@ -3,4 +3,5 @@
     <string name="sign_out">Sign Out</string>
     <string name="send_button_label">Send</string>
     <string name="image_view_content_description">photo_content_description</string>
+    <string name="date_format">M/dd h:mm a</string>
 </resources>

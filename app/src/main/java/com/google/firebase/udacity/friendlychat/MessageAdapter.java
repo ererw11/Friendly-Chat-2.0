@@ -2,10 +2,14 @@ package com.google.firebase.udacity.friendlychat;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.v7.widget.CardView;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -13,8 +17,13 @@ import com.bumptech.glide.Glide;
 import java.util.List;
 
 public class MessageAdapter extends ArrayAdapter<FriendlyMessage> {
-    public MessageAdapter(Context context, int resource, List<FriendlyMessage> objects) {
+
+    private static final String TAG = MessageAdapter.class.getCanonicalName();
+    String signedInUser;
+
+    public MessageAdapter(Context context, int resource, List<FriendlyMessage> objects, String username) {
         super(context, resource, objects);
+        signedInUser = username;
     }
 
     @Override
@@ -27,6 +36,7 @@ public class MessageAdapter extends ArrayAdapter<FriendlyMessage> {
         TextView messageTextView = (TextView) convertView.findViewById(R.id.messageTextView);
         TextView authorTextView = (TextView) convertView.findViewById(R.id.nameTextView);
         TextView dateTextView = (TextView) convertView.findViewById(R.id.dateTextView);
+        CardView messageCardView = (CardView) convertView.findViewById(R.id.messageView);
 
         FriendlyMessage message = getItem(position);
 
@@ -44,6 +54,18 @@ public class MessageAdapter extends ArrayAdapter<FriendlyMessage> {
         }
         authorTextView.setText(message.getName());
         dateTextView.setText(message.getDate());
+
+        // this moves the messages on the right if from user
+        Log.i(TAG, signedInUser);
+        Log.i(TAG, message.getName());
+        if (message.getName().equals(signedInUser)) {
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT);
+            params.gravity = Gravity.RIGHT;
+
+            messageCardView.setLayoutParams(params);
+        }
 
         return convertView;
     }

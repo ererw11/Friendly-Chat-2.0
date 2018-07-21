@@ -114,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Initialize message ListView and its adapter
         List<FriendlyMessage> friendlyMessages = new ArrayList<>();
-        messageAdapter = new MessageAdapter(this, R.layout.item_message, friendlyMessages);
+        messageAdapter = new MessageAdapter(this, R.layout.item_message, friendlyMessages, currentUser());
         messageListView.setAdapter(messageAdapter);
 
         // Initialize progress bar
@@ -203,10 +203,14 @@ public class MainActivity extends AppCompatActivity {
         fetchConfig();
     }
 
+    private String currentUser() {
+        return firebaseAuth.getCurrentUser().getDisplayName();
+    }
+
     private String getCurrentDate() {
-        SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy hh:mm a");
+        SimpleDateFormat format = new SimpleDateFormat(getString(R.string.date_format));
         Date currentDate = new Date();
-        return format.format(currentDate).toString();
+        return format.format(currentDate);
     }
 
     private void fetchConfig() {
