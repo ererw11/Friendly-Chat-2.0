@@ -52,7 +52,9 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -155,7 +157,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // Create the FriendlyMessage object using the text in the EditText and the username of the user
-                FriendlyMessage friendlyMessage = new FriendlyMessage(messageEditText.getText().toString(), username, null);
+                FriendlyMessage friendlyMessage = new FriendlyMessage(messageEditText.getText().toString(),
+                        username,
+                        null,
+                        getCurrentDate());
+                Log.i(TAG + " Date", friendlyMessage.getDate());
                 messagesDatabaseReference.push().setValue(friendlyMessage);
                 // Clear input box
                 messageEditText.setText("");
@@ -195,6 +201,12 @@ public class MainActivity extends AppCompatActivity {
         defaultConfigMap.put(FRIENDLY_MESSAGE_LENGTH_KEY, DEFAULT_MSG_LENGTH_LIMIT);
         firebaseRemoteConfig.setDefaults(defaultConfigMap);
         fetchConfig();
+    }
+
+    private String getCurrentDate() {
+        SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy hh:mm a");
+        Date currentDate = new Date();
+        return format.format(currentDate).toString();
     }
 
     private void fetchConfig() {
@@ -252,7 +264,8 @@ public class MainActivity extends AppCompatActivity {
 
                                         FriendlyMessage friendlyMessage = new FriendlyMessage(null,
                                                 username,
-                                                downloadUrl.toString());
+                                                downloadUrl.toString(),
+                                                getCurrentDate());
                                         Log.i(TAG, downloadUrl.toString());
                                         messagesDatabaseReference.push().setValue(friendlyMessage);
                                     }
