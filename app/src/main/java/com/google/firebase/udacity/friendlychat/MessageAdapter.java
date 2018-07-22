@@ -4,12 +4,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.CardView;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -34,9 +33,9 @@ public class MessageAdapter extends ArrayAdapter<FriendlyMessage> {
 
         ImageView photoImageView = (ImageView) convertView.findViewById(R.id.photoImageView);
         TextView messageTextView = (TextView) convertView.findViewById(R.id.messageTextView);
-        TextView authorTextView = (TextView) convertView.findViewById(R.id.nameTextView);
+        TextView nameTextView = (TextView) convertView.findViewById(R.id.nameTextView);
         TextView dateTextView = (TextView) convertView.findViewById(R.id.dateTextView);
-        CardView messageCardView = (CardView) convertView.findViewById(R.id.messageView);
+        CardView messageCardView = (CardView) convertView.findViewById(R.id.messageCardView);
 
         FriendlyMessage message = getItem(position);
 
@@ -52,19 +51,19 @@ public class MessageAdapter extends ArrayAdapter<FriendlyMessage> {
             photoImageView.setVisibility(View.GONE);
             messageTextView.setText(message.getText());
         }
-        authorTextView.setText(message.getName());
+        nameTextView.setText(message.getName());
         dateTextView.setText(message.getDate());
 
-        // this moves the messages on the right if from user
+        // this moves the messages on the right if message is from user
         Log.i(TAG, signedInUser);
         Log.i(TAG, message.getName());
         if (message.getName().equals(signedInUser)) {
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.WRAP_CONTENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT);
-            params.gravity = Gravity.RIGHT;
+            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
+                    RelativeLayout.LayoutParams.WRAP_CONTENT,
+                    RelativeLayout.LayoutParams.WRAP_CONTENT);
 
-            messageCardView.setLayoutParams(params);
+            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_END);
+            messageCardView.setLayoutParams(layoutParams);
         }
 
         return convertView;
