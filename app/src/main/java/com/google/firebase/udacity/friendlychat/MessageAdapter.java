@@ -2,6 +2,8 @@ package com.google.firebase.udacity.friendlychat;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.View;
@@ -20,13 +22,13 @@ public class MessageAdapter extends ArrayAdapter<FriendlyMessage> {
     private static final String TAG = MessageAdapter.class.getCanonicalName();
     String signedInUser;
 
-    public MessageAdapter(Context context, int resource, List<FriendlyMessage> objects, String username) {
+    public MessageAdapter(Context context, int resource, List<FriendlyMessage> objects, String signedInUser) {
         super(context, resource, objects);
-        signedInUser = username;
+        this.signedInUser = signedInUser;
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         if (convertView == null) {
             convertView = ((Activity) getContext()).getLayoutInflater().inflate(R.layout.item_message, parent, false);
         }
@@ -54,15 +56,29 @@ public class MessageAdapter extends ArrayAdapter<FriendlyMessage> {
         nameTextView.setText(message.getName());
         dateTextView.setText(message.getDate());
 
-        // this moves the messages on the right if message is from user
+        // This moves the messages on the right if message is from user
         Log.i(TAG, signedInUser);
         Log.i(TAG, message.getName());
-        if (message.getName().equals(signedInUser)) {
-            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
-                    RelativeLayout.LayoutParams.WRAP_CONTENT,
-                    RelativeLayout.LayoutParams.WRAP_CONTENT);
 
-            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_END);
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.WRAP_CONTENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT);
+
+        if (message.getName().equals(signedInUser)) {
+            // Move the message to the left
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                layoutParams.addRule(RelativeLayout.ALIGN_PARENT_END);
+            } else {
+                layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+            }
+            messageCardView.setLayoutParams(layoutParams);
+        } else {
+            // Move the message to the right
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                layoutParams.addRule(RelativeLayout.ALIGN_PARENT_START);
+            } else {
+                layoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+            }
             messageCardView.setLayoutParams(layoutParams);
         }
 
