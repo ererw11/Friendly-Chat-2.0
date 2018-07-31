@@ -35,7 +35,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.firebase.ui.auth.*;
+import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.BuildConfig;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -220,20 +220,20 @@ public class MainActivity extends AppCompatActivity {
             cacheExpiration = 0;
         }
         firebaseRemoteConfig.fetch(cacheExpiration)
-        .addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                firebaseRemoteConfig.activateFetched();
-                applyRetrievedLengthLimit();
-            }
-        })
-        .addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.w(TAG, "Error fetching config", e);
-                applyRetrievedLengthLimit();
-            }
-        });
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        firebaseRemoteConfig.activateFetched();
+                        applyRetrievedLengthLimit();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error fetching config", e);
+                        applyRetrievedLengthLimit();
+                    }
+                });
     }
 
     private void applyRetrievedLengthLimit() {

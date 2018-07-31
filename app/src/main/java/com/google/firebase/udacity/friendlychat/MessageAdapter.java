@@ -82,6 +82,9 @@ public class MessageAdapter extends ArrayAdapter<FriendlyMessage> {
             messageCardView.setLayoutParams(layoutParams);
         }
 
+        // Color the message
+        messageCardView.setCardBackgroundColor(ColorPicker.chooseColorBasedOnLetter(message.getName()));
+
         return convertView;
     }
 }
